@@ -1,114 +1,166 @@
-//
-//                                                        ▀▀▀▀▀     ▀▀▀▀▀          ▀▀█▀▀
-//                                                        ▄▀▀▀▄  ▄  ▄▀▀▀▄  ▄  ▄▀▀▀▄  █  ▄▀▀▀▄
-//                                                        █   █  █  █   █  █  █   █  █  █   █
-//                                                         ▀▀▀   █   ▀▀▀   █   ▀▀▀   ▀   ▀▀▀
-//                                                               █      ▄▄▄█▄▄▄    █   █  
-//                                                               ▀      █  █  █     █▄█
-//                                                             ▀▀▀▀▀    █  █  █      ▀
-//                                                                      ▀  ▀  ▀
-//
-// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
 
+#include <dt-bindings/zmk/mouse.h>
 #include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
-
-#define Base        0
-#define Nav         1
-#define Sym         2
-#define Fun         3
-#define Game        4
-#define Gameplus    5
+#include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/ext_power.h>
 
 &mt {
-    quick-tap-ms = <100>;
-    global-quick-tap;
     flavor = "tap-preferred";
-    tapping-term-ms = <170>;
-};
-
-&lt {
-    tapping-term-ms = <240>;
-    flavor = "balanced";
-    quick-tap-ms = <150>;
+    tapping_term_ms = <200>;
 };
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        combo_esc {
+            timeout-ms = <50>;
+            key-positions = <21 22>;
+            bindings = <&kp ESC>;
+        };
+
+        combo_3 {
+            timeout-ms = <50>;
+            key-positions = <7 8>;
+            bindings = <&kp BACKSPACE>;
+        };
+
+        combo_ent {
+            timeout-ms = <50>;
+            key-positions = <28 29>;
+            bindings = <&kp RET>;
+        };
+
+        combo_1 {
+            timeout-ms = <50>;
+            key-positions = <33 36>;
+            bindings = <&to 2>;
+        };
+
+        combo_left {
+            timeout-ms = <50>;
+            key-positions = <0 1>;
+            bindings = <&kp TAB>;
+            layers = <3>;
+        };
+
+        combo_lclk {
+            timeout-ms = <50>;
+            key-positions = <26 27>;
+            bindings = <&mkp LCLK>;
+            layers = <3>;
+        };
+
+        combo_0 {
+            bindings = <&to 0>;
+            key-positions = <32 37>;
+        };
+    };
+
     behaviors {
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
             label = "HOMEROW_MODS";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
             tapping-term-ms = <200>;
-            quick-tap-ms = <125>;
-            global-quick-tap;
+            quick_tap_ms = <0>;
+            flavor = "tap-preferred";
             bindings = <&kp>, <&kp>;
         };
-    };
 
-    combos { compatible = "zmk,combos"; };
+        hs: homerow_shifts {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_SHIFTS";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick_tap_ms = <0>;
+            flavor = "balanced";
+            bindings = <&kp>, <&kp>;
+        };
+
+        hsl: homerow_shifts_layer {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_SHIFTS_LAYER";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick_tap_ms = <0>;
+            flavor = "balanced";
+            bindings = <&kp>, <&to>;
+        };
+
+        td: tapdance {
+            compatible = "zmk,behavior-hold-tap";
+            label = "TAPDANCE";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick_tap_ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+
+        bl: layertap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYERTAP";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick_tap_ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&to>, <&kp>;
+        };
+    };
 
     keymap {
         compatible = "zmk,keymap";
 
-        Base {
-            display-name = "Base";
+        default_layer {
             bindings = <
-              &kp Q       &kp W       &kp E          &kp R         &kp T        &kp Y    &kp U        &kp I        &kp O       &kp P
-              &hm LGUI A  &hm LALT S  &hm LCTRL D    &hm LSHIFT F  &kp G        &kp H    &hm RSHFT J  &hm RCTRL K  &hm RALT L  &hm RGUI SEMICOLON
-&lt 3 ESCAPE  &kp Z       &kp X       &kp C          &kp V         &kp B        &kp N    &kp M        &kp COMMA    &kp DOT     &kp SLASH           &kp APOSTROPHE
-                                      &mt LCTRL DEL  &lt 1 TAB     &kp SPACE    &kp RET  &lt 2 BSPC   &kp MINUS
+                         &kp Q        &kp W  &kp E        &kp R             &kp T            &kp Y      &kp U   &kp I                 &kp O                   &mt CAPS P
+                         &kp A        &kp S  &kp D        &kp F             &kp G            &kp H      &kp J   &kp K                 &kp L                   &hs RIGHT_SHIFT SEMICOLON
+&hs LEFT_SHIFT LEFT_GUI  &hs LCTRL Z  &kp X  &kp C        &kp V             &kp B            &kp N      &kp M   &hs UNDERSCORE SLASH  &hs EXCLAMATION PERIOD  &hs QUESTION SLASH         &hs DOUBLE_QUOTES SQT
+                                             &lt 0 SPACE  &hs LEFT_ALT TAB  &kp BACKSPACE    &kp ENTER  &tog 2  &tog 3
             >;
         };
 
-        Nav {
-            display-name = "Nav";
+        left_layer {
             bindings = <
-              &kp TILDE       &trans     &kp UP_ARROW  &trans     &kp LBRC    &kp RBRC  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &kp NUMBER_0
-              &kp LEFT_SHIFT  &kp LEFT   &kp DOWN      &kp RIGHT  &kp LBKT    &kp RBKT  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &kp MINUS
-&kp LEFT_ALT  &kp LEFT_WIN    &kp MINUS  &trans        &kp PLUS   &kp LPAR    &kp RPAR  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp KP_MULTIPLY  &kp PLUS
-                                         &trans        &trans     &trans      &trans    &trans        &kp DOT
+        &kp EXCLAMATION   &kp AT_SIGN    &kp HASH   &kp DLLR  &kp PERCENT          &kp LCTRL           &kp AMPERSAND         &kp ASTERISK           &hm SEMICOLON COLON  &kp BACKSPACE
+        &kp TAB           &kp EQUAL      &kp COMMA  &kp SQT   &kp PLUS             &hm HOME BACKSLASH  &kp LEFT_BRACE        &kp RIGHT_BRACE        &hm END PIPE         &kp ENTER
+&trans  &hs LSHIFT TILDE  &kp AMPERSAND  &kp MINUS  &kp DQT   &kp DOUBLE_QUOTES    &kp LEFT_BRACKET    &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp RBKT             &sl 4          &trans
+                                         &to 0      &trans    &trans               &trans              &to 2                 &to 3
             >;
         };
 
-        Sym {
-            display-name = "Sym";
+        right_layer {
             bindings = <
-                &kp EXCL  &kp AT  &kp HASH  &kp DOLLAR  &kp PERCENT    &kp CARET  &kp AMPERSAND  &kp KP_ASTERISK  &kp SQT  &kp DQT
-                &trans    &trans  &trans    &trans      &trans         &trans     &trans         &trans           &trans   &trans
-&studio_unlock  &trans    &trans  &trans    &trans      &trans         &kp UNDER  &kp EQUAL      &trans           &trans   &kp SLASH  &kp HOME
-                                  &trans    &trans      &trans         &trans     &trans         &trans
+                      &kp ESCAPE             &kp C_PP   &kp C_PREV         &kp C_NEXT         &kp EQUAL    &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &kp MINUS  &kp UP_ARROW
+                      &kp RIGHT_PARENTHESIS  &kp F2     &hm LALT C_VOL_DN  &hm LGUI C_VOL_UP  &kp F4       &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &kp PLUS   &kp DOWN_ARROW
+&kp LEFT_PARENTHESIS  &tog 4                 &kp PRCNT  &kp SLASH          &kp STAR           &to 2        &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp LEFT   &to 3           &kp RIGHT
+                                                        &to 0              &kp BACKSPACE      &trans       &kp NUMBER_0  &kp COMMA     &kp PERIOD
             >;
         };
 
-        Fun {
-            display-name = "Fun";
+        tri_layer {
             bindings = <
-        &bootloader  &trans  &trans  &trans  &to 4     &trans  &trans  &trans  &kp END  &kp F1
-        &trans       &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans   &kp F10
-&trans  &trans       &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans   &kp F20  &kp F7
-                             &trans  &trans  &trans    &trans  &trans  &trans
+          &trans      &msc SCRL_LEFT  &mmv MOVE_UP    &msc SCRL_RIGHT  &trans    &kp K_BACK  &kp C_AL_PREVIOUS_TASK  &kp C_AL_NEXT_TASK  &kp K_FORWARD            &trans
+          &kp TAB     &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans    &kp LEFT    &kp DOWN                &hm RALT UP         &hm RIGHT_COMMAND RIGHT  &kp LG(RBKT)
+&kp CAPS  &kp LSHIFT  &mkp RCLK       &msc SCRL_UP    &msc SCRL_DOWN   &to 0     &kp RGUI    &td HOME PG_DN          &td END PG_UP       &trans                   &kp RSHIFT    &trans
+                                      &to 0           &trans           &trans    &to 1       &to 2                   &trans
             >;
         };
 
-        Gaming {
-            display-name = "Gaming";
+        bt {
             bindings = <
-            &kp Z           &kp X  &kp C      &kp V         &sl 5     &trans  &trans  &trans  &trans  &trans
-            &kp TAB         &kp Q  &kp W      &kp E         &kp R     &trans  &trans  &trans  &trans  &trans
-&kp ESCAPE  &kp LEFT_SHIFT  &kp A  &kp S      &kp D         &kp F     &trans  &trans  &trans  &trans  &trans  &trans
-                                   &kp LCTRL  &kp LEFT_ALT  &trans    &trans  &trans  &trans
-            >;
-        };
-
-        Gaming+ {
-            display-name = "Gaming+";
-            bindings = <
-        &kp F10  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp T     &kp RA(RC(Y))  &kp RA(RC(U))  &trans  &trans  &kp LC(RA(DEL))
-        &kp L    &kp O         &kp Y         &kp K         &kp G     &kp F5         &trans         &trans  &trans  &trans
-&trans  &to 0    &trans        &trans        &trans        &trans    &trans         &trans         &trans  &trans  &trans           &kp LA(F4)
-                               &kp J         &kp I         &kp M     &trans         &trans         &trans
+        &kp F2       &kp F3        &kp F4      &kp F5        &kp F6    &kp F7           &kp F8          &kp F9           &kp F10     &kp F11
+        &bootloader  &kt C_VOL_DN  &kt K_MUTE  &kt C_VOL_UP  &trans    &kp PRINTSCREEN  &kp SCROLLLOCK  &kp PAUSE_BREAK  &kp INSERT  &kt C_BRIGHTNESS_INC
+&kp F1  &bt BT_PRV   &bt BT_NXT    &bt BT_CLR  &trans        &to 0     &trans           &trans          &trans           &trans      &kt C_BRIGHTNESS_DEC  &kp F12
+                                   &to 0       &trans        &trans    &to 1            &to 2           &to 3
             >;
         };
     };
